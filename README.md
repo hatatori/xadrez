@@ -1,1 +1,1 @@
-# xadrez
+# https://hatatori.github.io/xadrez/
