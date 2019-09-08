@@ -37,9 +37,11 @@ for(i in org){
 //movimentação das peças
 
 function moveTo(coord_1,coord_2){
-	coord_1 = document.getElementById(coord_1)
-	coord_2 = document.getElementById(coord_2)
-	coord_2.appendChild(coord_1.children[0])
+	try{
+		coord_1 = document.getElementById(coord_1)
+		coord_2 = document.getElementById(coord_2)
+		coord_2.appendChild(coord_1.children[0])	
+	}catch(e){}
 }
 
 //checa se é uma peça na coordenada
@@ -62,15 +64,43 @@ function getCoordenada(e){
 
 cords = []
 
-tabuleiro.onclick = function(e){
+// tabuleiro.onclick = function(e){
 
-	if(typeof(getCoordenada(e)) != "undefined")
-		cords.push(getCoordenada(e))
+// 	// if(typeof(getCoordenada(e)) != "undefined")
+// 	// 	cords.push(getCoordenada(e))
 	
-	if(cords.length == 2){
-		moveTo(cords[0],cords[1])
-		cords = []
-	}
+// 	// if(cords.length == 2){
+// 	// 	moveTo(cords[0],cords[1])
+// 	// 	cords = []
+// 	// }
 	
-	console.log(cords)
+// }
+
+segura = 0
+
+tabuleiro.onmousedown=function(e){
+	
+	k = e.target
+	cords.push(getCoordenada(e))	
+	e.preventDefault()
+
+	segura = 1
+}
+
+// tabuleiro.onmousemove=function(e){
+// 	if(segura == 1){
+// 		x = e.pageX-25
+// 		y = e.pageY-25
+		
+// 		k.style.top = y
+// 		k.style.left = x
+// 	}
+// }
+
+tabuleiro.onmouseup=function(e){
+	segura = 0
+	cords.push(getCoordenada(e))
+	moveTo(cords[0],cords[1])
+	cords = []
+	k.removeAttribute("style")
 }
