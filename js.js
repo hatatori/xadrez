@@ -1,3 +1,13 @@
+//audios
+
+move = document.createElement("audio")
+move.src="move.ogg"
+
+
+comeu = document.createElement("audio")
+comeu.src="move.ogg"
+
+
 //criação do tabuleiro
 
 linha = 8
@@ -40,7 +50,8 @@ function moveTo(coord_1,coord_2){
 	try{
 		coord_1 = document.getElementById(coord_1)
 		coord_2 = document.getElementById(coord_2)
-		coord_2.appendChild(coord_1.children[0])	
+		
+		coord_2.appendChild(coord_1.children[0])
 	}catch(e){}
 }
 
@@ -52,6 +63,8 @@ function checkPeca(e){
 	else
 		return false
 }	
+
+
 
 function getCoordenada(e){
 	if( e.target.id != "tabuleiro" ){
@@ -79,28 +92,44 @@ cords = []
 segura = 0
 
 tabuleiro.onmousedown=function(e){
-	
 	k = e.target
-	cords.push(getCoordenada(e))	
+	cords[0] = getCoordenada(e)
 	e.preventDefault()
-
 	segura = 1
 }
 
-// tabuleiro.onmousemove=function(e){
-// 	if(segura == 1){
-// 		x = e.pageX-25
-// 		y = e.pageY-25
+tabuleiro.onmousemove=function(e){
+	if(segura == 1){
+		x = e.pageX-25
+		y = e.pageY-25
 		
-// 		k.style.top = y
-// 		k.style.left = x
-// 	}
-// }
+		k.style.top = y
+		k.style.left = x
+	}
+}
+
+
+tabuleiro.onmouseover=function(e){
+	
+		if(!checkPeca(e)){
+			cords[1] = e.target.id
+			moveTo(cords[0],cords[1])	
+			console.log(e)
+		}
+
+		try{
+			e.target.children[0].removeAttribute("style")
+		}catch(e){}
+	
+}
 
 tabuleiro.onmouseup=function(e){
-	segura = 0
-	cords.push(getCoordenada(e))
-	moveTo(cords[0],cords[1])
-	cords = []
-	k.removeAttribute("style")
+
+	segura = 0		
+	
+	if(checkPeca(e))
+		k.style.display="none"
+
+	move.play()
+	
 }
