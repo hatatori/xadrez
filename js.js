@@ -3,10 +3,8 @@
 move = document.createElement("audio")
 move.src="move.ogg"
 
-
 comeu = document.createElement("audio")
 comeu.src="move.ogg"
-
 
 //criação do tabuleiro
 
@@ -64,8 +62,6 @@ function checkPeca(e){
 		return false
 }	
 
-
-
 function getCoordenada(e){
 	if( e.target.id != "tabuleiro" ){
 		if(!e.target.classList.value.match(/p/g))
@@ -75,61 +71,62 @@ function getCoordenada(e){
 	}
 }
 
-cords = []
 
-// tabuleiro.onclick = function(e){
 
-// 	// if(typeof(getCoordenada(e)) != "undefined")
-// 	// 	cords.push(getCoordenada(e))
+
+peca = {
 	
-// 	// if(cords.length == 2){
-// 	// 	moveTo(cords[0],cords[1])
-// 	// 	cords = []
-// 	// }
-	
-// }
-
-segura = 0
-
-tabuleiro.onmousedown=function(e){
-	k = e.target
-	cords[0] = getCoordenada(e)
-	e.preventDefault()
-	segura = 1
-}
-
-tabuleiro.onmousemove=function(e){
-	if(segura == 1){
-		x = e.pageX-25
-		y = e.pageY-25
-		
-		k.style.top = y
-		k.style.left = x
+	pos:function(e,x,y){
+		e.style.top = y
+		e.style.left = x
+	},
+	sumir:function(){ 
+		this.el.style.display='none'
+	},
+	mostrar:function(){
+		return this.el.removeAttribute("style")
 	}
 }
 
+drag = false
+cord = []
 
-tabuleiro.onmouseover=function(e){
-	
-		if(!checkPeca(e)){
-			cords[1] = e.target.id
-			moveTo(cords[0],cords[1])	
-			console.log(e)
-		}
-
-		try{
-			e.target.children[0].removeAttribute("style")
-		}catch(e){}
-	
+tabuleiro.onmousedown = function(e){
+	if(checkPeca(e)){
+		drag = true
+		peca.el = e.target
+		cord[0] = getCoordenada(e)
+	}
 }
 
-tabuleiro.onmouseup=function(e){
+tabuleiro.onmouseup = function(e){
+	if(checkPeca(e)){
+		drag=false
+		peca.sumir()
+		move.play()
+	}
+}
 
-	segura = 0		
-	
-	if(checkPeca(e))
-		k.style.display="none"
+tabuleiro.onmouseover=function(e){
+	try{
+		cord[1] = e.target.id
+		moveTo(cord[0],cord[1])	
+		peca.mostrar()
+	}catch(e){}
+}
 
-	move.play()
-	
+tabuleiro.onmouseout=function(e){
+	try{
+		// peca.el.removeAttribute("style")
+		// peca.apagar(e)
+		peca.mostrar()
+	}catch(e){}
+}
+
+tabuleiro.onmousemove=function(e){
+	if(drag){
+		dx = e.clientX-25
+		dy = e.clientY-25
+		peca.pos(peca.el,dx,dy)
+	}
 }
