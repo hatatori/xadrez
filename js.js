@@ -108,6 +108,7 @@ tabuleiro.onmousemove=function(e){
 	}
 }
 
+
 tabuleiro.onmouseover=function(e){
 	
 		if(!checkPeca(e)){
