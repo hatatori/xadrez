@@ -55,22 +55,27 @@ for(i=0;i<8;i++){
 
 function moveTo(cor_1,cor_2){
 	try{
+		
 		dx = tab[cor_2][0]
 		dy = tab[cor_2][1]
 
-		if(tab[cor_2].el != undefined){
-			comeu.play()
-		}else{
-			move.play()
-		}
 
-		
-		apagar = tab[cor_2].el
-		tab[cor_1].el.id = cor_2 
-		tab[cor_2].el = tab[cor_1].el
-		tab[cor_1].el.style.transform = 'translate('+dx+'px, '+dy+'px)'
-		tab[cor_1] = tab[cor_1].slice(0,2)
-		apagar.remove()
+
+		if(cor_1 != cor_2){
+
+			if(tab[cor_2].el != undefined){
+				comeu.play()
+			}else{
+				move.play()
+			}
+
+			apagar = tab[cor_2].el
+			tab[cor_1].el.id = cor_2 
+			tab[cor_2].el = tab[cor_1].el
+			tab[cor_1].el.style.transform = 'translate('+dx+'px, '+dy+'px)'
+			tab[cor_1] = tab[cor_1].slice(0,2)
+			apagar.remove()
+		}
 		
 	}catch(e){}
 }
