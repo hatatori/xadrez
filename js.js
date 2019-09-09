@@ -1,28 +1,10 @@
 //audios
 
 move = document.createElement("audio")
-move.src="move.ogg"
+move.src="move.mp3"
 
 comeu = document.createElement("audio")
-comeu.src="move.ogg"
-
-//criação do tabuleiro
-
-linha = 8
-coluna = 8
-
-val = 'abcdefgh'.split("")
-
-for(i=linha;i>0;i--){
-	for(j=0;j<coluna;j++){
-
-		cls = ((j+i)%2==0) ? "light" : "dark"
-		casa = val[j]+i		
-	
-		tabuleiro.innerHTML += "<div id="+casa+" class='"+cls+"'></div>"
-		
-	}	
-}	
+comeu.src="comeu.mp3"
 
 //categoriza peças
 
@@ -32,101 +14,86 @@ function renderPeca(t){
 	return b[a.indexOf(t)]
 }
 
-//organiza peças no tabuleiro
+//estrutura do tabuleiro
 
-org = "tcbdrbct,pppppppp,xxxxxxxx,xxxxxxxx,xxxxxxxx,xxxxxxxx,PPPPPPPP,TCBDRBCT"
+org = "tcbdrbct,pppppppp,xxxxxxxx,xxxxxxxx,xxxxxxxx,xxxxxxxx,PPPPPPPP,TCBRDBCT"
+
 org = org.split(",").join("")
 
-for(i in org){
-	if(renderPeca(org[i]) != undefined)
-	tabuleiro.children[i].innerHTML = "<div class='p "+renderPeca(org[i])+"'>"
-}
+//renderizar tabuleiro
 
-//movimentação das peças
-
-function moveTo(coord_1,coord_2){
-	try{
-		coord_1 = document.getElementById(coord_1)
-		coord_2 = document.getElementById(coord_2)
-		
-		coord_2.appendChild(coord_1.children[0])
-	}catch(e){}
-}
-
-//checa se é uma peça na coordenada
-
-function checkPeca(e){
-	if(e.target.classList.value.match(/\bp\b/g))
-		return true
-	else
-		return false
-}	
-
-function getCoordenada(e){
-	if( e.target.id != "tabuleiro" ){
-		if(!e.target.classList.value.match(/p/g))
-			return e.target.id
-		else
-			return e.target.parentElement.id
-	}
-}
-
-
-
-
-peca = {
-	
-	pos:function(e,x,y){
-		e.style.top = y
-		e.style.left = x
-	},
-	sumir:function(){ 
-		this.el.style.display='none'
-	},
-	mostrar:function(){
-		return this.el.removeAttribute("style")
-	}
-}
-
+num = 0
+val = 'abcdefgh'.split("")
+col = 8
+tab = []
+pecas = []
 drag = false
-cord = []
 
-tabuleiro.onmousedown = function(e){
-	if(checkPeca(e)){
-		drag = true
-		peca.el = e.target
-		cord[0] = getCoordenada(e)
-	}
+for(i=0;i<8;i++){
+	for(j=0;j<8;j++){
+
+		nome_coordenada = val[(j)]+(9-(i+1))
+		tab[nome_coordenada] = [ j*50 , i*50 ]
+		num = i*8+j
+
+		if(org[num] != 'x'){
+
+			nome_peca = renderPeca(org[num])
+			
+			div = document.createElement("div")
+			div.id = val[(j)]+(9-(i+1))
+			div.style.transform = "translate("+j*50+"px,"+i*50+"px)"
+			div.setAttribute("class","p "+nome_peca)
+			
+			tab[nome_coordenada].el = div
+			tabuleiro.appendChild(div)
+		}
+	}	
 }
 
-tabuleiro.onmouseup = function(e){
-	if(checkPeca(e)){
-		drag=false
-		peca.sumir()
-		move.play()
-	}
-}
+//moveTo('a1','d4') // movimentação das peças
 
-tabuleiro.onmouseover=function(e){
+function moveTo(cor_1,cor_2){
 	try{
-		cord[1] = e.target.id
-		moveTo(cord[0],cord[1])	
-		peca.mostrar()
+		dx = tab[cor_2][0]
+		dy = tab[cor_2][1]
+
+		if(tab[cor_2].el != undefined){
+			comeu.play()
+		}else{
+			move.play()
+		}
+
+		
+		apagar = tab[cor_2].el
+		tab[cor_1].el.id = cor_2 
+		tab[cor_2].el = tab[cor_1].el
+		tab[cor_1].el.style.transform = 'translate('+dx+'px, '+dy+'px)'
+		tab[cor_1] = tab[cor_1].slice(0,2)
+		apagar.remove()
+		
 	}catch(e){}
 }
 
-tabuleiro.onmouseout=function(e){
-	try{
-		// peca.el.removeAttribute("style")
-		// peca.apagar(e)
-		peca.mostrar()
-	}catch(e){}
+tabuleiro.onmousedown=function(e){
+	p1 = click
+}
+
+tabuleiro.onmouseup=function(e){
+	p2 = click
+	moveTo(p1,p2)
 }
 
 tabuleiro.onmousemove=function(e){
-	if(drag){
-		dx = e.clientX-25
-		dy = e.clientY-25
-		peca.pos(peca.el,dx,dy)
-	}
+
+	x = e.layerX
+	y = e.layerY
+
+	casaX = parseInt(x/50)
+	casaY = parseInt(y/50)
+	
+	pixelX = casaX*50
+	pixelY = casaX*50
+	
+	click = (val[casaX])+(8-casaY)
 }
