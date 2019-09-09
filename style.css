@@ -1,4 +1,19 @@
-*{margin: 0;padding: 0;}
+*{margin: 0;padding: 0;
+	-webkit-user-select: none;
+	-khtml-user-select: none;
+	-moz-user-select: none;
+	-o-user-select: none;
+	user-select: none;
+}
+body{background-color: #222222}
+
+#tabuleiro{
+	width: 400;
+	height: 400;
+	background-image: url("tabuleiro.svg");
+	background-size: 100%;
+	position: relative;
+}
 
 .centrao{
 	width: 100%;
@@ -6,7 +21,6 @@
 	display: flex;
 	justify-content: center;
 	align-items: center;
-
 }
 #tabuleiro{width: 400}
 #tabuleiro div{
@@ -15,7 +29,8 @@
 	float: left;
 	display: flex;
 	justify-content:center;
-	align-items: center
+	align-items: center;
+	position: absolute;
 }
 
 .light{background-color: #f0d9b5}
