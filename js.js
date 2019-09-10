@@ -94,6 +94,7 @@ function moveTo(cor_1,cor_2,color){
 					jogador.vez = 'white'
 
 			if(cor_1 != cor_2 && verifica_casa(cor_1)){
+				
 
 				if(tab[cor_2].el != undefined  ){
 					comeu.play()
