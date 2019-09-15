@@ -88,10 +88,10 @@ function moveTo(cor_1,cor_2,color){
 			dx = tab[cor_2][0]
 			dy = tab[cor_2][1]
 
-			if(jogador.vez == 'white')
-					jogador.vez = 'black'
-				else
-					jogador.vez = 'white'
+// 			if(jogador.vez == 'white')
+// 					jogador.vez = 'black'
+// 				else
+// 					jogador.vez = 'white'
 
 			if(cor_1 != cor_2 && verifica_casa(cor_1)){
 				
