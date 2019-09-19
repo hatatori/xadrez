@@ -68,10 +68,11 @@ function verifica_cor(cor){
 
 //verifica de quem é a vez da jogada
 
-
 jogador = {
 	vez:'white'
 }
+
+drag = false
 
 //verifica se determinada peça existe na coordenada
 
@@ -85,17 +86,17 @@ function verifica_casa(cord){
 function moveTo(cor_1,cor_2,color){
 	try{
 		if(verifica_cor(cor_1) == color){
+
 			dx = tab[cor_2][0]
 			dy = tab[cor_2][1]
 
-// 			if(jogador.vez == 'white')
-// 					jogador.vez = 'black'
-// 				else
-// 					jogador.vez = 'white'
+			if(jogador.vez == 'white')
+					jogador.vez = 'black'
+				else
+					jogador.vez = 'white'
 
 			if(cor_1 != cor_2 && verifica_casa(cor_1)){
 				
-
 				if(tab[cor_2].el != undefined  ){
 					comeu.play()
 				}else{
@@ -107,25 +108,32 @@ function moveTo(cor_1,cor_2,color){
 				tab[cor_2].el = tab[cor_1].el
 				tab[cor_1].el.style.transform = 'translate('+dx+'px, '+dy+'px)'
 				tab[cor_1] = tab[cor_1].slice(0,2)
-				apagar.remove()
-
-				
+				apagar.remove()				
 			}
 		}
-		
 	}catch(e){}
 }
 
 tabuleiro2.onmousedown=function(e){
 	p1 = click
+	drag = true
+	peca = document.getElementById(click)
 }
 
 tabuleiro2.onmouseup=function(e){
 
+	drag = false
+
 	p2 = click
-	
-	moveTo(p1,p2,jogador.vez)
-	
+
+	if(p1!=p2)
+		moveTo(p1,p2,jogador.vez)
+
+	if(p1==p2){
+		x = tab[p1][0]
+		y = tab[p1][1]
+		peca.style.transform="translate("+(x)+"px, "+(y)+"px)"
+	}
 }
 
 tabuleiro2.onmousemove=function(e){
@@ -140,4 +148,8 @@ tabuleiro2.onmousemove=function(e){
 	pixelY = casaX*50
 	
 	click = (val[casaX])+(8-casaY)
+
+	if(drag && verifica_cor(p1) == jogador.vez){
+		peca.style.transform="translate("+(x-25)+"px, "+(y-25)+"px)"
+	}
 }
